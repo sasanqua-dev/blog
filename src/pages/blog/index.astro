@@ -80,7 +80,7 @@ const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueO
 					<p style="color: rgb(var(--gray)); padding: 2rem 0;">まだ記事がありません。</p>
 				) : posts.map((post) => (
 					<li>
-						<a href={`/blog/${post.id}/`}>
+						<a href={`/article/blog/${post.id}/`}>
 							<p class="date"><FormattedDate date={post.data.pubDate} /></p>
 							<h4 class="title">{post.data.title}</h4>
 						</a>

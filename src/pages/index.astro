@@ -90,7 +90,7 @@ const posts = [...tech, ...blog].sort((a, b) => b.data.pubDate.valueOf() - a.dat
 				{
 					posts.map((post) => (
 						<li>
-							<a href={`/${post.category}/${post.id}/`}>
+							<a href={`/article/${post.category}/${post.id}/`}>
 								<p class="date">
 									<FormattedDate date={post.data.pubDate} />
 								</p>
