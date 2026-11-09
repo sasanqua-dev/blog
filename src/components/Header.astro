@@ -4,6 +4,7 @@ import { SITE_TITLE } from '../consts';
 
 <header>
 	<a href="/">{SITE_TITLE}</a>
+	<a href="https://sasanqua.work/links" target="_blank" class="portfolio">Portfolio</a>
 </header>
 <style>
 	header {
@@ -12,6 +13,9 @@ import { SITE_TITLE } from '../consts';
 		margin: 0 auto;
 		padding-left: 1em;
 		padding-right: 1em;
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
 	}
 	a {
 		font-size: 0.9rem;
@@ -22,5 +26,9 @@ import { SITE_TITLE } from '../consts';
 	}
 	a:hover {
 		color: var(--accent);
+	}
+	a.portfolio {
+		font-weight: 400;
+		color: rgb(var(--gray));
 	}
 </style>
