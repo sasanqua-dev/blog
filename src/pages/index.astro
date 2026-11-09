@@ -82,15 +82,15 @@ const posts = [...tech, ...blog].sort((a, b) => b.data.pubDate.valueOf() - a.dat
 		<Header />
 		<main>
 			<nav class="tabs">
-				<a href="/article" class="active">All</a>
-				<a href="/article/tech">Tech</a>
-				<a href="/article/blog">Blog</a>
+				<a href="/" class="active">All</a>
+				<a href="/tech">Tech</a>
+				<a href="/blog">Blog</a>
 			</nav>
 			<ul>
 				{
 					posts.map((post) => (
 						<li>
-							<a href={`/article/${post.category}/${post.id}/`}>
+							<a href={`/${post.category}/${post.id}/`}>
 								<p class="date">
 									<FormattedDate date={post.data.pubDate} />
 								</p>

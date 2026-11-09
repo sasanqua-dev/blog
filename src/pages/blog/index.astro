@@ -1,10 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseHead from '../../../components/BaseHead.astro';
-import Footer from '../../../components/Footer.astro';
-import FormattedDate from '../../../components/FormattedDate.astro';
-import Header from '../../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
@@ -71,16 +71,16 @@ const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueO
 		<Header />
 		<main>
 			<nav class="tabs">
-				<a href="/article">All</a>
-				<a href="/article/tech">Tech</a>
-				<a href="/article/blog" class="active">Blog</a>
+				<a href="/">All</a>
+				<a href="/tech">Tech</a>
+				<a href="/blog" class="active">Blog</a>
 			</nav>
 			<ul>
 				{posts.length === 0 ? (
 					<p style="color: rgb(var(--gray)); padding: 2rem 0;">まだ記事がありません。</p>
 				) : posts.map((post) => (
 					<li>
-						<a href={`/article/blog/${post.id}/`}>
+						<a href={`/blog/${post.id}/`}>
 							<p class="date"><FormattedDate date={post.data.pubDate} /></p>
 							<h4 class="title">{post.data.title}</h4>
 						</a>
