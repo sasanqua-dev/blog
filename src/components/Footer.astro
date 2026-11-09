@@ -1,0 +1,34 @@
+---
+const today = new Date();
+---
+
+<footer>
+	<span>&copy; {today.getFullYear()} sasanqua</span>
+	<div class="links">
+		<a href="https://x.com/sasanqua_dev" target="_blank">X</a>
+		<a href="https://github.com/sasanqua-dev" target="_blank">GitHub</a>
+</div>
+</footer>
+<style>
+	footer {
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 2rem 1em 3rem;
+		color: rgb(var(--gray));
+		font-size: 0.8rem;
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+	}
+	.links {
+		display: flex;
+		gap: 1rem;
+	}
+	a {
+		color: rgb(var(--gray));
+		text-decoration: none;
+	}
+	a:hover {
+		color: rgb(var(--gray-dark));
+	}
+</style>
