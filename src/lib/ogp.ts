@@ -159,7 +159,7 @@ function buildTree({ title, description, category, date }: OgpInput): Node {
 	const descLines = description ? fitLines(description, DESC_FONT_SIZE, WRAP_WIDTH, DESC_MAX_LINES) : [];
 
 	// Vertical budget: the title gets whatever the fixed rows and the description leave.
-	const fixedHeight = 44 /* chip row */ + 40 /* accent bar + gap */ + 52 /* footer */;
+	const fixedHeight = 44 /* chip row */ + 48 /* gap above title */ + 52 /* footer */;
 	const descHeight = descLines.length > 0 ? descLines.length * DESC_FONT_SIZE * DESC_LINE_HEIGHT + 28 : 0;
 	const titleLayout = layoutTitle(title, CONTENT_HEIGHT - fixedHeight - descHeight);
 
@@ -252,9 +252,6 @@ function buildTree({ title, description, category, date }: OgpInput): Node {
 	const titleBlock = h(
 		'div',
 		{ style: { display: 'flex', flexDirection: 'column' } },
-		h('div', {
-			style: { display: 'flex', width: 84, height: 6, borderRadius: 3, background: palette.glow, marginBottom: 34 },
-		}),
 		...titleLayout.lines.map((line) =>
 			h(
 				'div',
