@@ -34,16 +34,20 @@ const DESC_MAX_LINES = 2;
 const TITLE_MAX_LINES = 3;
 const TITLE_SIZES = [84, 76, 68, 60, 54, 48];
 
-// Brand palette, kept in step with src/styles/global.css.
+// Sky palette: daytime blue fading to a pale horizon, with navy type for contrast.
 const palette = {
-	deep: '#14293a',
-	accent: '#3d6b8e',
-	accentDark: '#1e3d52',
-	glow: '#8fb8d6',
-	ink: '#ffffff',
-	inkSoft: 'rgba(255, 255, 255, 0.78)',
-	inkFaint: 'rgba(255, 255, 255, 0.42)',
-	line: 'rgba(255, 255, 255, 0.18)',
+	skyTop: '#5aa3d9',
+	skyMid: '#a3d4f1',
+	skyLow: '#eaf7fd',
+	sun: '#fff3c4',
+	cloud: 'rgba(255, 255, 255, 0.92)',
+	ink: '#0c2a44',
+	inkSoft: 'rgba(12, 42, 68, 0.8)',
+	inkFaint: 'rgba(12, 42, 68, 0.62)',
+	line: 'rgba(12, 42, 68, 0.2)',
+	chipBg: '#0c2a44',
+	chipText: '#eaf7fd',
+	accent: '#2f6f9f',
 };
 
 export type OgpCategory = 'tech' | 'blog';
@@ -163,38 +167,56 @@ function buildTree({ title, description, category, date }: OgpInput): Node {
 	const descHeight = descLines.length > 0 ? descLines.length * DESC_FONT_SIZE * DESC_LINE_HEIGHT + 28 : 0;
 	const titleLayout = layoutTitle(title, CONTENT_HEIGHT - fixedHeight - descHeight);
 
-	// Decorative rings sit off the top-right corner and are clipped by the canvas.
-	const rings = [
-		{ size: 760, top: -330, right: -250, alpha: 0.07 },
-		{ size: 520, top: -190, right: -130, alpha: 0.1 },
-		{ size: 280, top: -60, right: -20, alpha: 0.14 },
-	].map(({ size, top, right, alpha }) =>
+	// Sun with a soft halo, top-right.
+	const sun = [
 		h('div', {
 			style: {
 				position: 'absolute',
-				top,
-				right,
-				width: size,
-				height: size,
-				borderRadius: size,
-				border: `2px solid rgba(143, 184, 214, ${alpha + 0.12})`,
-				background: `rgba(143, 184, 214, ${alpha / 2})`,
+				top: -150,
+				right: -150,
+				width: 560,
+				height: 560,
+				backgroundImage:
+					'radial-gradient(circle at center, rgba(255, 243, 196, 0.85) 0%, rgba(255, 243, 196, 0) 60%)',
 			},
 		}),
-	);
+		h('div', {
+			style: {
+				position: 'absolute',
+				top: 30,
+				right: 280,
+				width: 84,
+				height: 84,
+				borderRadius: 84,
+				background: palette.sun,
+			},
+		}),
+	];
 
-	// A soft bloom in the bottom-left, to balance the rings in the top-right.
-	const glow = h('div', {
-		style: {
-			position: 'absolute',
-			left: -180,
-			bottom: -260,
-			width: 560,
-			height: 560,
-			backgroundImage:
-				'radial-gradient(circle at center, rgba(143, 184, 214, 0.26) 0%, rgba(143, 184, 214, 0) 68%)',
-		},
-	});
+	// Clouds built from overlapping rounded blobs. `s` scales the whole cloud.
+	const cloud = (left: number, top: number, s: number) => {
+		const blob = (x: number, y: number, w: number, hgt: number) =>
+			h('div', {
+				style: {
+					position: 'absolute',
+					left: x * s,
+					top: y * s,
+					width: w * s,
+					height: hgt * s,
+					borderRadius: 999,
+					background: palette.cloud,
+				},
+			});
+		return h(
+			'div',
+			{ style: { position: 'absolute', left, top, width: 260 * s, height: 130 * s } },
+			blob(0, 52, 260, 64),
+			blob(38, 22, 118, 118),
+			blob(118, 0, 124, 124),
+			blob(190, 40, 80, 80),
+		);
+	};
+	const clouds = [cloud(-30, 470, 1.05), cloud(900, 300, 0.7), cloud(1040, 520, 0.5)];
 
 	// Thin frame inset from the edge.
 	const frame = h('div', {
@@ -218,8 +240,8 @@ function buildTree({ title, description, category, date }: OgpInput): Node {
 				height: 44,
 				padding: '0 20px',
 				borderRadius: 999,
-				background: palette.glow,
-				color: palette.deep,
+				background: palette.chipBg,
+				color: palette.chipText,
 				fontSize: 22,
 				fontWeight: 700,
 				letterSpacing: '0.16em',
@@ -313,7 +335,7 @@ function buildTree({ title, description, category, date }: OgpInput): Node {
 		h(
 			'div',
 			{
-				style: { display: 'flex', fontSize: 22, fontWeight: 700, letterSpacing: '0.16em', color: palette.glow },
+				style: { display: 'flex', fontSize: 22, fontWeight: 700, letterSpacing: '0.16em', color: palette.accent },
 			},
 			'READ',
 		),
@@ -347,12 +369,12 @@ function buildTree({ title, description, category, date }: OgpInput): Node {
 				width: OGP_WIDTH,
 				height: OGP_HEIGHT,
 				overflow: 'hidden',
-				backgroundImage: `linear-gradient(135deg, ${palette.accent} 0%, ${palette.accentDark} 45%, ${palette.deep} 100%)`,
+				backgroundImage: `linear-gradient(180deg, ${palette.skyTop} 0%, ${palette.skyMid} 55%, ${palette.skyLow} 100%)`,
 				fontFamily: FONT_FAMILY,
 			},
 		},
-		...rings,
-		glow,
+		...sun,
+		...clouds,
 		frame,
 		content,
 	);
