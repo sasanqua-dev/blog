@@ -17,7 +17,7 @@ import satori from 'satori';
 export const OGP_WIDTH = 1200;
 export const OGP_HEIGHT = 630;
 
-const SITE_LABEL = 'blog.saqu.dev';
+const SITE_LABEL = 'sasanqua.dev';
 const FONT_FAMILY = 'Noto Sans JP';
 const FONT_PATH = path.join(process.cwd(), 'src/assets/fonts/NotoSansJP-Bold.woff');
 
