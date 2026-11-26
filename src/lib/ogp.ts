@@ -39,8 +39,6 @@ const palette = {
 	skyTop: '#5aa3d9',
 	skyMid: '#a3d4f1',
 	skyLow: '#eaf7fd',
-	sun: '#fff3c4',
-	cloud: 'rgba(255, 255, 255, 0.92)',
 	ink: '#0c2a44',
 	inkSoft: 'rgba(12, 42, 68, 0.8)',
 	inkFaint: 'rgba(12, 42, 68, 0.62)',
@@ -166,57 +164,6 @@ function buildTree({ title, description, category, date }: OgpInput): Node {
 	const fixedHeight = 44 /* chip row */ + 48 /* gap above title */ + 52 /* footer */;
 	const descHeight = descLines.length > 0 ? descLines.length * DESC_FONT_SIZE * DESC_LINE_HEIGHT + 28 : 0;
 	const titleLayout = layoutTitle(title, CONTENT_HEIGHT - fixedHeight - descHeight);
-
-	// Sun with a soft halo, top-right.
-	const sun = [
-		h('div', {
-			style: {
-				position: 'absolute',
-				top: -150,
-				right: -150,
-				width: 560,
-				height: 560,
-				backgroundImage:
-					'radial-gradient(circle at center, rgba(255, 243, 196, 0.85) 0%, rgba(255, 243, 196, 0) 60%)',
-			},
-		}),
-		h('div', {
-			style: {
-				position: 'absolute',
-				top: 30,
-				right: 280,
-				width: 84,
-				height: 84,
-				borderRadius: 84,
-				background: palette.sun,
-			},
-		}),
-	];
-
-	// Clouds built from overlapping rounded blobs. `s` scales the whole cloud.
-	const cloud = (left: number, top: number, s: number) => {
-		const blob = (x: number, y: number, w: number, hgt: number) =>
-			h('div', {
-				style: {
-					position: 'absolute',
-					left: x * s,
-					top: y * s,
-					width: w * s,
-					height: hgt * s,
-					borderRadius: 999,
-					background: palette.cloud,
-				},
-			});
-		return h(
-			'div',
-			{ style: { position: 'absolute', left, top, width: 260 * s, height: 130 * s } },
-			blob(0, 52, 260, 64),
-			blob(38, 22, 118, 118),
-			blob(118, 0, 124, 124),
-			blob(190, 40, 80, 80),
-		);
-	};
-	const clouds = [cloud(-30, 470, 1.05), cloud(900, 300, 0.7), cloud(1040, 520, 0.5)];
 
 	// Thin frame inset from the edge.
 	const frame = h('div', {
@@ -373,8 +320,6 @@ function buildTree({ title, description, category, date }: OgpInput): Node {
 				fontFamily: FONT_FAMILY,
 			},
 		},
-		...sun,
-		...clouds,
 		frame,
 		content,
 	);
