@@ -1,6 +1,6 @@
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
-import { Resvg } from '@resvg/resvg-js';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import satori from 'satori';
 
 /**
@@ -19,7 +19,17 @@ export const OGP_HEIGHT = 630;
 
 const SITE_LABEL = 'sasanqua.dev';
 const FONT_FAMILY = 'Noto Sans JP';
-const FONT_PATH = path.join(process.cwd(), 'src/assets/fonts/NotoSansJP-Bold.woff');
+
+function loadFontBuffer(): Buffer {
+	const __filename = fileURLToPath(import.meta.url);
+	return readFileSync(join(dirname(__filename), '../assets/fonts/NotoSansJP-Bold.woff'));
+}
+
+let _fontBuffer: Buffer | undefined;
+function getFont(): Buffer {
+	_fontBuffer ??= loadFontBuffer();
+	return _fontBuffer;
+}
 
 const PADDING_X = 96;
 const PADDING_Y = 84;
@@ -329,21 +339,16 @@ function buildTree({ title, description, category, date }: OgpInput): Node {
 // Rendering
 // ---------------------------------------------------------------------------
 
-let fontPromise: Promise<Buffer> | undefined;
-function loadFont(): Promise<Buffer> {
-	fontPromise ??= readFile(FONT_PATH);
-	return fontPromise;
-}
-
 /** Renders one post's OGP image and returns it as PNG bytes. */
 export async function renderOgpImage(input: OgpInput): Promise<Uint8Array> {
-	const fontData = await loadFont();
+	const fontData = getFont();
 	const svg = await satori(buildTree(input) as never, {
 		width: OGP_WIDTH,
 		height: OGP_HEIGHT,
 		fonts: [{ name: FONT_FAMILY, data: fontData, weight: 700, style: 'normal' }],
 	});
 
+	const { Resvg } = await import('@resvg/resvg-js');
 	const resvg = new Resvg(svg, {
 		fitTo: { mode: 'width', value: OGP_WIDTH },
 		font: {
